@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payslip API Documentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #swagger-ui {
+            max-width: 1460px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script>
+        window.onload = function() {
+            const ui = SwaggerUIBundle({
+                url: './swagger.json',
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "BaseLayout",
+                docExpansion: "list",
+                defaultModelsExpandDepth: 3,
+                defaultModelExpandDepth: 3,
+                displayRequestDuration: true,
+                filter: true,
+                showExtensions: true,
+                showCommonExtensions: true,
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                tryItOutEnabled: true,
+                requestInterceptor: (req) => {
+                    // Add CORS headers to the request
+                    req.headers = {
+                        ...req.headers,
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+                    };
+                    return req;
+                },
+                responseInterceptor: (res) => {
+                    // Add CORS headers to the response
+                    res.headers = {
+                        ...res.headers,
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+                    };
+                    return res;
+                }
+            });
+
+            window.ui = ui;
+        };
+    </script>
+</body>
+</html> 

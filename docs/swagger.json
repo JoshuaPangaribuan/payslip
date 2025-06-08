@@ -1,0 +1,910 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A payslip generation system API",
+        "title": "Payslip API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8081",
+    "basePath": "/api/v1",
+    "paths": {
+        "/admin/attendance-period": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new attendance period for employees to submit their attendance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Add attendance period",
+                "parameters": [
+                    {
+                        "description": "Attendance period details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminAddAttendancePeriodInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminAddAttendancePeriodOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/payroll-run": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Process payroll for a specific period",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Run payroll",
+                "parameters": [
+                    {
+                        "description": "Payroll run details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminRunPayrollInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminRunPayrollOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/payroll-summary": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get summary of all payslips for a specific period",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get payroll summary",
+                "parameters": [
+                    {
+                        "description": "Payroll summary details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminPayrollSummaryInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.AdminPayrollSummaryOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/employee/attendance": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Submit daily attendance record. Employee ID is obtained from JWT token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Submit attendance",
+                "parameters": [
+                    {
+                        "description": "Attendance details (attendance period ID and date only)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitAttendanceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitAttendanceOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/employee/generate-payslip": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Generate payslip for a specific month",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Generate payslip",
+                "parameters": [
+                    {
+                        "description": "Payslip generation details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeGeneratePayslipInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeGeneratePayslipOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/employee/overtime": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Submit overtime request. Employee ID is obtained from JWT token. Requires attendance period ID to validate the overtime date is within the period range.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Submit overtime",
+                "parameters": [
+                    {
+                        "description": "Overtime details (attendance period ID, date, and hours)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitOvertimeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitOvertimeOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/employee/reimbursement": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Submit reimbursement request. Employee ID is obtained from JWT token. Attendance period ID is required.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Submit reimbursement",
+                "parameters": [
+                    {
+                        "description": "Reimbursement details (attendance period ID, amount, and description)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitReimbursementInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeSubmitReimbursementOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Authenticate employee and get JWT token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Employee login",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeLoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecases.EmployeeLoginOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/pkgerror.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "pkgerror.Code": {
+            "type": "integer",
+            "enum": [
+                0
+            ],
+            "x-enum-varnames": [
+                "Generic"
+            ]
+        },
+        "pkgerror.Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code is the standardized business error code that can be used across domains.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/pkgerror.Code"
+                        }
+                    ]
+                },
+                "errorType": {
+                    "description": "ErrorType will refer what is the current error type.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/pkgerror.ErrorType"
+                        }
+                    ]
+                },
+                "message": {
+                    "description": "Message of the error will be displayed if the original error is nil.",
+                    "type": "string"
+                },
+                "original": {
+                    "description": "Original is the original error that wrapped by this Error."
+                },
+                "responseCode": {
+                    "description": "ResponseCode is error response code from partner",
+                    "type": "string"
+                }
+            }
+        },
+        "pkgerror.ErrorType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "ValidationError",
+                "BusinessError",
+                "ServerError",
+                "PartnerError"
+            ]
+        },
+        "usecases.AdminAddAttendancePeriodInput": {
+            "type": "object",
+            "required": [
+                "end_date",
+                "start_date"
+            ],
+            "properties": {
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.AdminAddAttendancePeriodOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.AdminPayrollSummaryInput": {
+            "type": "object",
+            "required": [
+                "payroll_run_id"
+            ],
+            "properties": {
+                "payroll_run_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.AdminPayrollSummaryOutput": {
+            "type": "object",
+            "properties": {
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "employee_summaries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usecases.EmployeePayrollSummary"
+                    }
+                },
+                "payroll_run_id": {
+                    "type": "string"
+                },
+                "processed_at": {
+                    "type": "string"
+                },
+                "total_take_home_pay": {
+                    "type": "number"
+                }
+            }
+        },
+        "usecases.AdminRunPayrollInput": {
+            "type": "object",
+            "required": [
+                "attendance_period_id"
+            ],
+            "properties": {
+                "attendance_period_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.AdminRunPayrollOutput": {
+            "type": "object",
+            "properties": {
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "payroll_run_id": {
+                    "type": "string"
+                },
+                "run_at": {
+                    "type": "string"
+                },
+                "total_employee_count": {
+                    "type": "integer"
+                },
+                "total_take_home_pay": {
+                    "type": "number"
+                }
+            }
+        },
+        "usecases.AttendanceSummary": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "integer"
+                }
+            }
+        },
+        "usecases.EmployeeGeneratePayslipInput": {
+            "type": "object",
+            "required": [
+                "employee_id",
+                "month",
+                "year"
+            ],
+            "properties": {
+                "employee_id": {
+                    "type": "string"
+                },
+                "month": {
+                    "type": "integer",
+                    "maximum": 12,
+                    "minimum": 1
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "usecases.EmployeeGeneratePayslipOutput": {
+            "type": "object",
+            "properties": {
+                "attendance_days": {
+                    "type": "integer"
+                },
+                "attendance_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usecases.AttendanceSummary"
+                    }
+                },
+                "base_salary": {
+                    "type": "number"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "employee_name": {
+                    "type": "string"
+                },
+                "generated_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "month": {
+                    "type": "integer"
+                },
+                "overtime_hours": {
+                    "type": "integer"
+                },
+                "overtime_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usecases.OvertimeSummary"
+                    }
+                },
+                "overtime_pay": {
+                    "type": "number"
+                },
+                "reimbursements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usecases.ReimbursementSummary"
+                    }
+                },
+                "take_home_pay": {
+                    "type": "number"
+                },
+                "total_reimbursement": {
+                    "type": "number"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "usecases.EmployeeLoginInput": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeeLoginOutput": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeePayrollSummary": {
+            "type": "object",
+            "properties": {
+                "base_salary": {
+                    "type": "number"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "employee_name": {
+                    "type": "string"
+                },
+                "overtime_pay": {
+                    "type": "number"
+                },
+                "reimbursements": {
+                    "type": "number"
+                },
+                "take_home_pay": {
+                    "type": "number"
+                }
+            }
+        },
+        "usecases.EmployeeSubmitAttendanceInput": {
+            "type": "object",
+            "required": [
+                "attendance_period_id",
+                "date"
+            ],
+            "properties": {
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeeSubmitAttendanceOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeeSubmitOvertimeInput": {
+            "type": "object",
+            "required": [
+                "attendance_period_id",
+                "date",
+                "hours"
+            ],
+            "properties": {
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 1
+                }
+            }
+        },
+        "usecases.EmployeeSubmitOvertimeOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeeSubmitReimbursementInput": {
+            "type": "object",
+            "required": [
+                "amount",
+                "attendance_period_id",
+                "description",
+                "employee_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "employee_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.EmployeeSubmitReimbursementOutput": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "attendance_period_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecases.OvertimeSummary": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "integer"
+                },
+                "pay": {
+                    "type": "number"
+                }
+            }
+        },
+        "usecases.ReimbursementSummary": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

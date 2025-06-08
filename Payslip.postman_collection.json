@@ -1,0 +1,1229 @@
+{
+	"info": {
+		"_postman_id": "f4695b33-4d42-425a-bf9c-fad9e4000de0",
+		"name": "Payslip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37086982"
+	},
+	"item": [
+		{
+			"name": "Entrypoint",
+			"item": [
+				{
+					"name": "[Admin] Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Menguraikan (parse) body dari response yang berbentuk JSON\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// Mengambil nilai 'token' dari dalam objek 'data'\r",
+									"const token = responseData.token;\r",
+									"\r",
+									"// Menyimpan nilai token ke environment variable dengan nama \"admin_token\"\r",
+									"pm.environment.set(\"admin_token\", token);\r",
+									"\r",
+									"// (Opsional) Menampilkan token di console untuk pengecekan\r",
+									"console.log(\"Token yang disimpan:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/v1/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Employee] Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Menguraikan (parse) body dari response yang berbentuk JSON\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// Mengambil nilai 'token' dari dalam objek 'data'\r",
+									"const token = responseData.token;\r",
+									"\r",
+									"// Menyimpan nilai token ke environment variable dengan nama \"admin_token\"\r",
+									"pm.environment.set(\"employee_token\", token);\r",
+									"\r",
+									"// (Opsional) Menampilkan token di console untuk pengecekan\r",
+									"console.log(\"Token yang disimpan:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"employee_001\",\r\n    \"password\" : \"employee_001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/v1/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[ADMIN] Attendance Period",
+			"item": [
+				{
+					"name": "Valid Period",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Menguraikan (parse) body dari response yang berbentuk JSON\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// Mengambil nilai 'token' dari dalam objek 'data'\r",
+									"const token = responseData.id;\r",
+									"\r",
+									"// Menyimpan nilai token ke environment variable dengan nama \"admin_token\"\r",
+									"pm.environment.set(\"attendance_period_id\", token);\r",
+									"\r",
+									"// (Opsional) Menampilkan token di console untuk pengecekan\r",
+									"console.log(\"Token yang disimpan:\", token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-01T00:00:00Z\",\r\n    \"end_date\": \"2025-03-31T23:59:59Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer YOUR_ADMIN_JWT_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-01T00:00:00Z\",\r\n    \"end_date\": \"2024-03-31T23:59:59Z\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Auth Header",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-01T00:00:00Z\",\r\n    \"end_date\": \"2025-03-31T23:59:59Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-01T00:00:00Z\",\r\n    \"end_date\": \"2024-03-31T23:59:59Z\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Auth Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer INVALID_TOKEN"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-01T00:00:00Z\",\r\n    \"end_date\": \"2025-03-31T23:59:59Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer INVALID_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-01T00:00:00Z\",\r\n    \"end_date\": \"2024-03-31T23:59:59Z\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Required Field",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-01T00:00:00Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer YOUR_ADMIN_JWT_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-01T00:00:00Z\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Date Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-01\",\r\n    \"end_date\": \"2025-03-31\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer YOUR_ADMIN_JWT_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-01\",\r\n    \"end_date\": \"2024-03-31\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] End Date before Start Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-31T00:00:00Z\",\r\n    \"end_date\": \"2025-03-01T23:59:59Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer YOUR_ADMIN_JWT_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-31T00:00:00Z\",\r\n    \"end_date\": \"2024-03-01T23:59:59Z\"\r\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Overlapping Date Range",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"2025-03-15T00:00:00Z\",\r\n    \"end_date\": \"2025-04-15T23:59:59Z\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/admin/attendance-period",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attendance-period"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/admin/attendance-period \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer YOUR_ADMIN_JWT_TOKEN\" \\\r\n  -d '{\r\n    \"start_date\": \"2024-03-15T00:00:00Z\",\r\n    \"end_date\": \"2024-04-15T23:59:59Z\"\r\n  }'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[EMPLOYEE] Overtime Request",
+			"item": [
+				{
+					"name": "Valid Overtime",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174000' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Hours < 1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174001' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 0\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Hours > 3",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174002' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 4\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Overtime Alr Exists",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174004' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Unauthorized",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174005' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer INVALID_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2025-03-20T00:00:00Z\",\r\n    \"hours\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer INVALID_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174006' \\\r\n-d '{\r\n    \"date\": \"2024-03-20\",\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"hours\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174007' \\\r\n-d '{\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Hours",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/overtime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"overtime"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/overtime' \\\r\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\r\n-H 'Content-Type: application/json' \\\r\n-H 'X-Request-ID: 123e4567-e89b-12d3-a456-426614174007' \\\r\n-d '{\r\n    \"hours\": 2\r\n}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[EMPLOYEE] Attendance Request",
+			"item": [
+				{
+					"name": "Valid Attendance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\": \"{{attendance_period_id}}\", // Run the attendance period collection first before execute this module\n    \"date\": \"2025-03-20T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"date\": \"2024-03-20T00:00:00Z\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Auth Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\": {{attendance_period_id}},\n    \"date\": \"2025-03-20T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"date\": \"2024-03-20T00:00:00Z\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Attendance Period ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_JWT_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\": \"invalid-uuid\",\n    \"date\": \"2025-03-20T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"invalid-uuid\",\n    \"date\": \"2024-03-20T00:00:00Z\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Day (Saturday)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\n    \"date\": \"2025-03-22T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"date\": \"2025-03-22T00:00:00Z\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Date Outside Attendance Period",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\n    \"date\": \"2025-04-10T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"date\": \"2025-04-01T00:00:00Z\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Second Submition (Same Date)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"attendance_period_id\": \"{{attendance_period_id}}\",\r\n    \"date\": \"2025-03-20T00:00:00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/attendance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"attendance"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST 'http://localhost:8081/api/v1/employee/attendance' \\\n-H 'Authorization: Bearer YOUR_JWT_TOKEN' \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"attendance_period_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"date\": \"2025-03-20T00:00:00Z\"\n}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[EMPLOYEE] Reimbursement Request",
+			"item": [
+				{
+					"name": "Valid Reimbursement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\":\"{{attendance_period_id}}\",\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/reimbursement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"reimbursement"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/employee/reimbursement \\\n  -H \"Authorization: Bearer YOUR_EMPLOYEE_JWT_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Missing Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\":\"{{attendance_period_id}}\",\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/reimbursement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"reimbursement"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/employee/reimbursement \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid JWT Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer INVALID_TOKEN"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\":\"{{attendance_period_id}}\",\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/reimbursement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"reimbursement"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/employee/reimbursement \\\n  -H \"Authorization: Bearer INVALID_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"amount\": \"150000.00\",\n    \"description\": \"Taxi to client meeting\"\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Amount is Zero or Negative",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\":\"{{attendance_period_id}}\",\n    \"amount\": \"0\",\n    \"description\": \"Taxi to client meeting\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/reimbursement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"reimbursement"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/employee/reimbursement \\\n  -H \"Authorization: Bearer YOUR_EMPLOYEE_JWT_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"amount\": \"0\",\n    \"description\": \"Taxi to client meeting\"\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "[Negative] Invalid Amount Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{employee_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_period_id\":\"{{attendance_period_id}}\",\n    \"amount\": \"notanumber\",\n    \"description\": \"Taxi to client meeting\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/employee/reimbursement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"employee",
+								"reimbursement"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/api/v1/employee/reimbursement \\\n  -H \"Authorization: Bearer YOUR_EMPLOYEE_JWT_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"amount\": \"notanumber\",\n    \"description\": \"Taxi to client meeting\"\n  }'"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

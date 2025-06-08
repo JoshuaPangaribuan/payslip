@@ -1,0 +1,19 @@
+with-expecter: true
+disable-version-string: true
+packages:
+
+  github.com/JoshuaPangaribuan/payslip/internal/payslip:
+    config:
+      all: true
+      recursive: true
+      outpkg: "payslipmocks"
+      filename: "mock_{{ .InterfaceName | snakecase }}.go"
+      dir: internal/payslip/internal/mocks
+
+  github.com/JoshuaPangaribuan/payslip/internal/pkg:
+    config:
+      all: true
+      recursive: true
+      outpkg: "pkgmocks"
+      filename: "mock_{{ .InterfaceName | snakecase }}.go"
+      dir: internal/pkg/pkgmocks

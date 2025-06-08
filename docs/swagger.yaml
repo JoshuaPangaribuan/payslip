@@ -1,0 +1,597 @@
+basePath: /api/v1
+definitions:
+  pkgerror.Code:
+    enum:
+    - 0
+    type: integer
+    x-enum-varnames:
+    - Generic
+  pkgerror.Error:
+    properties:
+      code:
+        allOf:
+        - $ref: '#/definitions/pkgerror.Code'
+        description: Code is the standardized business error code that can be used
+          across domains.
+      errorType:
+        allOf:
+        - $ref: '#/definitions/pkgerror.ErrorType'
+        description: ErrorType will refer what is the current error type.
+      message:
+        description: Message of the error will be displayed if the original error
+          is nil.
+        type: string
+      original:
+        description: Original is the original error that wrapped by this Error.
+      responseCode:
+        description: ResponseCode is error response code from partner
+        type: string
+    type: object
+  pkgerror.ErrorType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - ValidationError
+    - BusinessError
+    - ServerError
+    - PartnerError
+  usecases.AdminAddAttendancePeriodInput:
+    properties:
+      end_date:
+        type: string
+      start_date:
+        type: string
+    required:
+    - end_date
+    - start_date
+    type: object
+  usecases.AdminAddAttendancePeriodOutput:
+    properties:
+      created_at:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      start_date:
+        type: string
+    type: object
+  usecases.AdminPayrollSummaryInput:
+    properties:
+      payroll_run_id:
+        type: string
+    required:
+    - payroll_run_id
+    type: object
+  usecases.AdminPayrollSummaryOutput:
+    properties:
+      attendance_period_id:
+        type: string
+      employee_summaries:
+        items:
+          $ref: '#/definitions/usecases.EmployeePayrollSummary'
+        type: array
+      payroll_run_id:
+        type: string
+      processed_at:
+        type: string
+      total_take_home_pay:
+        type: number
+    type: object
+  usecases.AdminRunPayrollInput:
+    properties:
+      attendance_period_id:
+        type: string
+    required:
+    - attendance_period_id
+    type: object
+  usecases.AdminRunPayrollOutput:
+    properties:
+      attendance_period_id:
+        type: string
+      payroll_run_id:
+        type: string
+      run_at:
+        type: string
+      total_employee_count:
+        type: integer
+      total_take_home_pay:
+        type: number
+    type: object
+  usecases.AttendanceSummary:
+    properties:
+      date:
+        type: string
+      hours:
+        type: integer
+    type: object
+  usecases.EmployeeGeneratePayslipInput:
+    properties:
+      employee_id:
+        type: string
+      month:
+        maximum: 12
+        minimum: 1
+        type: integer
+      year:
+        type: integer
+    required:
+    - employee_id
+    - month
+    - year
+    type: object
+  usecases.EmployeeGeneratePayslipOutput:
+    properties:
+      attendance_days:
+        type: integer
+      attendance_list:
+        items:
+          $ref: '#/definitions/usecases.AttendanceSummary'
+        type: array
+      base_salary:
+        type: number
+      employee_id:
+        type: string
+      employee_name:
+        type: string
+      generated_at:
+        type: string
+      id:
+        type: string
+      month:
+        type: integer
+      overtime_hours:
+        type: integer
+      overtime_list:
+        items:
+          $ref: '#/definitions/usecases.OvertimeSummary'
+        type: array
+      overtime_pay:
+        type: number
+      reimbursements:
+        items:
+          $ref: '#/definitions/usecases.ReimbursementSummary'
+        type: array
+      take_home_pay:
+        type: number
+      total_reimbursement:
+        type: number
+      year:
+        type: integer
+    type: object
+  usecases.EmployeeLoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  usecases.EmployeeLoginOutput:
+    properties:
+      token:
+        type: string
+    type: object
+  usecases.EmployeePayrollSummary:
+    properties:
+      base_salary:
+        type: number
+      employee_id:
+        type: string
+      employee_name:
+        type: string
+      overtime_pay:
+        type: number
+      reimbursements:
+        type: number
+      take_home_pay:
+        type: number
+    type: object
+  usecases.EmployeeSubmitAttendanceInput:
+    properties:
+      attendance_period_id:
+        type: string
+      date:
+        type: string
+    required:
+    - attendance_period_id
+    - date
+    type: object
+  usecases.EmployeeSubmitAttendanceOutput:
+    properties:
+      created_at:
+        type: string
+      date:
+        type: string
+      employee_id:
+        type: string
+      id:
+        type: string
+    type: object
+  usecases.EmployeeSubmitOvertimeInput:
+    properties:
+      attendance_period_id:
+        type: string
+      date:
+        type: string
+      hours:
+        maximum: 3
+        minimum: 1
+        type: integer
+    required:
+    - attendance_period_id
+    - date
+    - hours
+    type: object
+  usecases.EmployeeSubmitOvertimeOutput:
+    properties:
+      created_at:
+        type: string
+      date:
+        type: string
+      employee_id:
+        type: string
+      hours:
+        type: integer
+      id:
+        type: string
+    type: object
+  usecases.EmployeeSubmitReimbursementInput:
+    properties:
+      amount:
+        type: number
+      attendance_period_id:
+        type: string
+      description:
+        type: string
+      employee_id:
+        type: string
+    required:
+    - amount
+    - attendance_period_id
+    - description
+    - employee_id
+    type: object
+  usecases.EmployeeSubmitReimbursementOutput:
+    properties:
+      amount:
+        type: number
+      attendance_period_id:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      employee_id:
+        type: string
+      id:
+        type: string
+    type: object
+  usecases.OvertimeSummary:
+    properties:
+      date:
+        type: string
+      hours:
+        type: integer
+      pay:
+        type: number
+    type: object
+  usecases.ReimbursementSummary:
+    properties:
+      amount:
+        type: number
+      date:
+        type: string
+      description:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: A payslip generation system API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Payslip API
+  version: "1.0"
+paths:
+  /admin/attendance-period:
+    post:
+      consumes:
+      - application/json
+      description: Create a new attendance period for employees to submit their attendance
+      parameters:
+      - description: Attendance period details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.AdminAddAttendancePeriodInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.AdminAddAttendancePeriodOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Add attendance period
+      tags:
+      - Admin
+  /admin/payroll-run:
+    post:
+      consumes:
+      - application/json
+      description: Process payroll for a specific period
+      parameters:
+      - description: Payroll run details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.AdminRunPayrollInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.AdminRunPayrollOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Run payroll
+      tags:
+      - Admin
+  /admin/payroll-summary:
+    get:
+      consumes:
+      - application/json
+      description: Get summary of all payslips for a specific period
+      parameters:
+      - description: Payroll summary details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.AdminPayrollSummaryInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.AdminPayrollSummaryOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Get payroll summary
+      tags:
+      - Admin
+  /employee/attendance:
+    post:
+      consumes:
+      - application/json
+      description: Submit daily attendance record. Employee ID is obtained from JWT
+        token.
+      parameters:
+      - description: Attendance details (attendance period ID and date only)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.EmployeeSubmitAttendanceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.EmployeeSubmitAttendanceOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Submit attendance
+      tags:
+      - Employee
+  /employee/generate-payslip:
+    get:
+      consumes:
+      - application/json
+      description: Generate payslip for a specific month
+      parameters:
+      - description: Payslip generation details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.EmployeeGeneratePayslipInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.EmployeeGeneratePayslipOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Generate payslip
+      tags:
+      - Employee
+  /employee/overtime:
+    post:
+      consumes:
+      - application/json
+      description: Submit overtime request. Employee ID is obtained from JWT token.
+        Requires attendance period ID to validate the overtime date is within the
+        period range.
+      parameters:
+      - description: Overtime details (attendance period ID, date, and hours)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.EmployeeSubmitOvertimeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.EmployeeSubmitOvertimeOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Submit overtime
+      tags:
+      - Employee
+  /employee/reimbursement:
+    post:
+      consumes:
+      - application/json
+      description: Submit reimbursement request. Employee ID is obtained from JWT
+        token. Attendance period ID is required.
+      parameters:
+      - description: Reimbursement details (attendance period ID, amount, and description)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.EmployeeSubmitReimbursementInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.EmployeeSubmitReimbursementOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      security:
+      - BearerAuth: []
+      summary: Submit reimbursement
+      tags:
+      - Employee
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate employee and get JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.EmployeeLoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecases.EmployeeLoginOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pkgerror.Error'
+      summary: Employee login
+      tags:
+      - Authentication
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
